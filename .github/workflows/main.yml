@@ -11,21 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Build Docker image
-      run: docker build -t traffic-app .
+      - name: Build Docker image
+        run: docker build -t traffic-app .
 
-    - name: Start services
-     run: docker compose up -d
+      - name: Start services
+        run: docker compose up -d
 
-    - name: Wait for services
-      run: sleep 10
+      - name: Wait for services
+        run: sleep 10
 
-    - name: Check running containers
-      run: docker ps
+      - name: Check running containers
+        run: docker compose ps
 
-    - name: Stop services
-      run: docker-compose down
-
+      - name: Stop services
+        run: docker compose down
