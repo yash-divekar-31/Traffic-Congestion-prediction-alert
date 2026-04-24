@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "source": "Open-Meteo API (https://api.open-meteo.com) — FREE, no API key required",
+    "endpoint": "https://api.open-meteo.com/v1/forecast?latitude=18.5204&longitude=73.8567&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation,weather_code",
+    "refreshInterval": 300000
+  },
+  "weatherCodeMap": {
+    "0-2": { "emoji": "☀️", "desc": "Clear skies", "congestionMultiplier": 1.0 },
+    "3-49": { "emoji": "⛅", "desc": "Partly cloudy", "congestionMultiplier": 1.05 },
+    "50-69": { "emoji": "🌧️", "desc": "Rain", "congestionMultiplier": 1.22 },
+    "70-79": { "emoji": "❄️", "desc": "Snow", "congestionMultiplier": 1.15 },
+    "80-99": { "emoji": "⛈️", "desc": "Thunderstorm", "congestionMultiplier": 1.35 }
+  },
+  "weatherImpacts": [
+    { "factor": "Rain",       "impact": "+22%", "desc": "Congestion vs clear day",    "bad": true },
+    { "factor": "Fog",        "impact": "+18%", "desc": "Speed reduction factor",     "bad": true },
+    { "factor": "Heat >38°C", "impact": "+8%",  "desc": "Driver behavior change",     "bad": true },
+    { "factor": "Night",      "impact": "-40%", "desc": "Volume reduction",           "bad": false },
+    { "factor": "Weekend",    "impact": "-35%", "desc": "Fewer commuters",            "bad": false }
+  ]
+}

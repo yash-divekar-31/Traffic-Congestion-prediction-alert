@@ -1,0 +1,178 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FlowSense MLOps Full Project</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial;background:#0b1120;color:white;overflow:hidden}
+#app{display:grid;grid-template-columns:300px 1fr 360px;height:100vh}
+#left,#right{background:#111827;padding:18px;overflow:auto}
+#left{border-right:1px solid #263041}
+#right{border-left:1px solid #263041}
+#map{height:100vh;width:100%}
+h1{color:#f59e0b;margin-bottom:15px}
+.card{background:#1e293b;border:1px solid #334155;padding:15px;border-radius:16px;margin-bottom:15px}
+.route{background:#0f172a;padding:12px;border-radius:12px;margin-top:10px;cursor:pointer}
+.route:hover{border:1px solid #f59e0b}
+input{width:100%;padding:12px;background:#020617;border:1px solid #334155;color:#fff;border-radius:10px}
+button{margin-top:10px;padding:10px 14px;background:#f59e0b;border:none;border-radius:10px;font-weight:bold;cursor:pointer}
+.badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:bold}
+.low{background:#14532d;color:#4ade80}.medium{background:#713f12;color:#facc15}.severe{background:#7f1d1d;color:#f87171}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{font-size:32px;font-weight:bold}
+#chatlog{height:260px;overflow:auto;background:#0f172a;padding:10px;border-radius:10px;margin-bottom:10px}
+.msg{background:#1e293b;margin:8px 0;padding:10px;border-radius:10px}
+.alert{background:#172033;padding:12px;border-radius:10px;margin-top:10px}
+.topbar{position:absolute;z-index:999;left:20px;top:20px;background:#111827;padding:12px 16px;border-radius:12px}
+</style>
+</head>
+<body>
+<div id='app'>
+<div id='left'>
+<h1>FlowSense MLOps</h1>
+<div class='card'>
+<h3>Search Live Route</h3><br>
+<input id='search' placeholder='Search Hadapsar, Hinjewadi'>
+<button onclick='searchRoute()'>Get Live Status</button>
+<div id='results'></div>
+</div>
+<div class='card'>
+<h3>Monitored Corridors</h3>
+<div id='routeList'></div>
+</div>
+<div class='card'>
+<h3>Active Alerts</h3>
+<div id='alerts'></div>
+</div>
+</div>
+
+<div style='position:relative'>
+<div class='topbar'>🚦 Pune Live Congestion <span id='cityFlow'>52%</span></div>
+<div id='map'></div>
+</div>
+
+<div id='right'>
+<h1>Analytics + ML Model</h1>
+<div class='grid'>
+<div class='card'>Avg Speed<div class='stat' id='speed'>41</div></div>
+<div class='card'>Delay<div class='stat' id='delay'>7</div></div>
+</div>
+
+<div class='card'>
+<h3>Predicted Congestion</h3>
+<div id='prediction' style='font-size:40px;color:#f59e0b'>57%</div>
+</div>
+
+<div class='card'>
+<canvas id='chart'></canvas>
+</div>
+
+<div class='card'>
+<h3>MLOps Traffic Assistant</h3>
+<div id='chatlog'>
+<div class='msg'>🤖 Ask about Hadapsar or best routes.</div>
+</div>
+<input id='msg' placeholder='Ask MLOps Assistant'>
+<button onclick='chatSend()'>Send</button>
+</div>
+</div>
+</div>
+
+<script>
+const routes=[
+{name:'Hadapsar Industrial',c:71,s:24,l:'severe',coord:[18.50,73.92]},
+{name:'Wakad Hinjewadi Tech',c:76,s:21,l:'severe',coord:[18.59,73.74]},
+{name:'FC Road Corridor',c:22,s:52,l:'low',coord:[18.52,73.85]},
+{name:'Kothrud Karve Road',c:33,s:46,l:'medium',coord:[18.50,73.82]}
+];
+
+let map=L.map('map').setView([18.52,73.85],12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+routes.forEach(r=>{
+let c=r.l=='low'?'green':r.l=='medium'?'yellow':'red';
+L.circleMarker(r.coord,{radius:10,color:c}).addTo(map)
+.bindPopup('<b>'+r.name+'</b><br>'+r.c+'% congestion');
+});
+
+function renderRoutes(data=routes){
+routeList.innerHTML='';
+data.forEach(r=>{
+routeList.innerHTML+=`<div class='route' onclick='map.setView([${r.coord}],14)'>
+<b>${r.name}</b><br><br>
+<span class='badge ${r.l}'>${r.l.toUpperCase()}</span>
+ ${r.c}% congestion
+</div>`
+})
+}
+
+function renderAlerts(){
+alerts.innerHTML='';
+routes.filter(x=>x.c>60).forEach(r=>{
+alerts.innerHTML+=`<div class='alert'>⚠ ${r.name}<br>${r.c}% congestion severe</div>`
+})
+}
+
+function searchRoute(){
+let q=search.value.toLowerCase();
+let m=routes.filter(r=>r.name.toLowerCase().includes(q));
+if(m.length){
+map.setView(m[0].coord,14);
+renderRoutes(m);
+results.innerHTML=`<div class='alert'>
+<b>${m[0].name}</b><br>
+Congestion ${m[0].c}%<br>
+Speed ${m[0].s} km/h<br>
+Status ${m[0].l.toUpperCase()}
+</div>`;
+}else{
+results.innerHTML="<div class='alert'>Route not found</div>"
+}
+}
+
+function chatSend(){
+let q=msg.value.trim();
+if(!q)return;
+chatlog.innerHTML+=`<div class='msg'>👤 ${q}</div>`;
+let t=q.toLowerCase();
+let r='Moderate city traffic.';
+if(t.includes('hadapsar'))r='🔴 Hadapsar 71% congestion, delay 8 min.';
+else if(t.includes('hinjewadi'))r='🚧 Severe congestion Hinjewadi avoid peak.';
+else if(t.includes('best route'))r='Optimal route predicted using MLOps engine.';
+chatlog.innerHTML+=`<div class='msg'>🤖 ${r}</div>`;
+msg.value='';
+chatlog.scrollTop=chatlog.scrollHeight;
+}
+
+new Chart(document.getElementById('chart'),{
+type:'line',
+data:{labels:['6','8','10','12','2','4','6'],datasets:[{data:[20,55,40,35,46,61,72],borderColor:'#f59e0b'}]}
+});
+
+function refresh(){
+routes.forEach(r=>{
+r.c=Math.max(15,Math.min(90,r.c+(Math.random()*12-6)));
+r.s=Math.round(60-r.c/2)
+});
+let avg=Math.round(routes.reduce((a,b)=>a+b.c,0)/routes.length);
+cityFlow.innerText=avg+'%';
+speed.innerText=Math.round(routes.reduce((a,b)=>a+b.s,0)/routes.length);
+delay.innerText=Math.round(avg/7);
+prediction.innerText=(avg+5)+'%';
+renderRoutes();
+renderAlerts();
+}
+
+renderRoutes();
+renderAlerts();
+setInterval(refresh,8000);
+</script>
+</body>
+</html>
+```

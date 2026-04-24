@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "city": "Pune",
+    "state": "Maharashtra",
+    "country": "India",
+    "timezone": "Asia/Kolkata",
+    "mapCenter": [18.5204, 73.8567],
+    "mapZoom": 13,
+    "dataSource": "OpenStreetMap + Open-Meteo (free, no API key)"
+  },
+  "routes": [
+    {
+      "id": "r1",
+      "name": "FC Road Corridor",
+      "from": "Shivajinagar",
+      "to": "Baner",
+      "coords": [[18.5204,73.8567],[18.5250,73.8480],[18.5300,73.8400]],
+      "baseDelay": 5,
+      "lengthKm": 4.2,
+      "lanes": 4,
+      "type": "arterial"
+    },
+    {
+      "id": "r2",
+      "name": "JM Road — Swargate",
+      "from": "Jangli Maharaj Road",
+      "to": "Swargate",
+      "coords": [[18.5162,73.8485],[18.5100,73.8560],[18.5050,73.8620]],
+      "baseDelay": 12,
+      "lengthKm": 3.8,
+      "lanes": 2,
+      "type": "arterial"
+    },
+    {
+      "id": "r3",
+      "name": "Shivajinagar Flyover",
+      "from": "Shivajinagar",
+      "to": "Pune Station",
+      "coords": [[18.5310,73.8490],[18.5270,73.8560],[18.5230,73.8620]],
+      "baseDelay": 18,
+      "lengthKm": 2.5,
+      "lanes": 4,
+      "type": "flyover"
+    },
+    {
+      "id": "r4",
+      "name": "Hadapsar Industrial",
+      "from": "Magarpatta",
+      "to": "Hadapsar",
+      "coords": [[18.5020,73.9280],[18.5070,73.9200],[18.5120,73.9120]],
+      "baseDelay": 25,
+      "lengthKm": 6.1,
+      "lanes": 2,
+      "type": "arterial"
+    },
+    {
+      "id": "r5",
+      "name": "Kothrud — Karve Road",
+      "from": "Kothrud",
+      "to": "Deccan",
+      "coords": [[18.5088,73.8240],[18.5130,73.8310],[18.5180,73.8390]],
+      "baseDelay": 8,
+      "lengthKm": 5.3,
+      "lanes": 4,
+      "type": "arterial"
+    },
+    {
+      "id": "r6",
+      "name": "Wakad — Hinjewadi Tech",
+      "from": "Wakad",
+      "to": "Hinjewadi IT Park",
+      "coords": [[18.5988,73.7310],[18.5900,73.7420],[18.5820,73.7530]],
+      "baseDelay": 30,
+      "lengthKm": 7.4,
+      "lanes": 4,
+      "type": "expressway"
+    },
+    {
+      "id": "r7",
+      "name": "Viman Nagar — Airport",
+      "from": "Viman Nagar",
+      "to": "Pune Airport",
+      "coords": [[18.5679,73.9143],[18.5750,73.9100],[18.5820,73.9050]],
+      "baseDelay": 10,
+      "lengthKm": 3.2,
+      "lanes": 4,
+      "type": "arterial"
+    },
+    {
+      "id": "r8",
+      "name": "Aundh — Baner Road",
+      "from": "Aundh",
+      "to": "Baner",
+      "coords": [[18.5590,73.8077],[18.5550,73.7980],[18.5490,73.7880]],
+      "baseDelay": 14,
+      "lengthKm": 4.8,
+      "lanes": 4,
+      "type": "arterial"
+    },
+    {
+      "id": "r9",
+      "name": "Pimpri — Chinchwad Road",
+      "from": "Pimpri",
+      "to": "Chinchwad",
+      "coords": [[18.6279,73.7997],[18.6200,73.8050],[18.6120,73.8100]],
+      "baseDelay": 20,
+      "lengthKm": 5.6,
+      "lanes": 6,
+      "type": "highway"
+    },
+    {
+      "id": "r10",
+      "name": "Kondhwa — Wanowrie",
+      "from": "Kondhwa",
+      "to": "Wanowrie",
+      "coords": [[18.4736,73.8800],[18.4810,73.8760],[18.4880,73.8720]],
+      "baseDelay": 16,
+      "lengthKm": 4.1,
+      "lanes": 2,
+      "type": "arterial"
+    }
+  ],
+  "knownIncidentZones": [
+    { "name": "Pune Station Junction", "coords": [18.5280, 73.8740], "type": "chronic_congestion" },
+    { "name": "Swargate Bus Terminus", "coords": [18.5012, 73.8553], "type": "chronic_congestion" },
+    { "name": "Hinjewadi Entry Gate",  "coords": [18.5900, 73.7390], "type": "peak_hour_jam" },
+    { "name": "Hadapsar Flyover",      "coords": [18.5090, 73.9200], "type": "bottleneck" },
+    { "name": "Magarpatta Junction",   "coords": [18.5070, 73.9300], "type": "signal_issue" }
+  ],
+  "peakHours": {
+    "morning": { "start": 8, "end": 10, "multiplier": 1.5 },
+    "evening": { "start": 17, "end": 20, "multiplier": 1.7 },
+    "lateNight": { "start": 23, "end": 5, "multiplier": 0.4 }
+  },
+  "mlFeatures": [
+    { "name": "Hour of Day",     "importance": 0.22 },
+    { "name": "Day of Week",     "importance": 0.18 },
+    { "name": "Rain Intensity",  "importance": 0.14 },
+    { "name": "Historical Avg",  "importance": 0.13 },
+    { "name": "Event Proximity", "importance": 0.10 },
+    { "name": "Road Capacity",   "importance": 0.08 },
+    { "name": "Temperature",     "importance": 0.06 },
+    { "name": "Wind Speed",      "importance": 0.04 },
+    { "name": "Visibility",      "importance": 0.03 },
+    { "name": "Humidity",        "importance": 0.02 }
+  ]
+}
