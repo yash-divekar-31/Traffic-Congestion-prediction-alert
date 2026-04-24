@@ -1,0 +1,31 @@
+name: Docker CI Pipeline
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Build Docker image
+      run: docker build -t traffic-app .
+
+    - name: Start services
+      run: docker-compose up -d
+
+    - name: Wait for services
+      run: sleep 10
+
+    - name: Check running containers
+      run: docker ps
+
+    - name: Stop services
+      run: docker-compose down
+
